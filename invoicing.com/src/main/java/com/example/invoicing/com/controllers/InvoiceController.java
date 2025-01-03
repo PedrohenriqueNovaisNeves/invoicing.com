@@ -48,4 +48,29 @@ public class InvoiceController {
 
         return ResponseEntity.status(HttpStatus.OK).body(invoice0.get());
     }
+
+    @PutMapping("/updateInvoice/{id}")
+    public ResponseEntity<Object> updateInvoice(@PathVariable(value = "id") UUID id, @RequestBody @Valid InvoiceRecord invoiceRecord){
+        Optional<InvoiceModel> invoice0 = invoiceRepository.findById(id);
+
+        if(invoice0.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invoice not found");
+        }
+
+        var invoiceModel = invoice0.get();
+        BeanUtils.copyProperties(invoiceRecord, invoiceModel);
+        return ResponseEntity.status(HttpStatus.OK).body(invoiceRepository.save(invoiceModel));
+    }
+
+    @DeleteMapping("/deleteInvoice/{id}")
+    public ResponseEntity<Object> deleteInvoice(@PathVariable(value = "id") UUID id){
+        Optional<InvoiceModel> invoice0 = invoiceRepository.findById(id);
+
+        if(invoice0.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invoice not found");
+        }
+
+        invoiceRepository.delete(invoice0.get());
+        return ResponseEntity.status(HttpStatus.OK).body("invoice delete successfully");
+    }
 }
