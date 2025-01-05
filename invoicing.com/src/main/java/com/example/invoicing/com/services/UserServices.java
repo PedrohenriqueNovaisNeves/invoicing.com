@@ -30,5 +30,11 @@ public class UserServices {
         return ResponseEntity.status(HttpStatus.OK).body(user.get());
     }
 
+    public ResponseEntity<Object> saveUser(UserModel userModel){
+        if(userRepository.findById(userModel.getIdUser()).isPresent()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already registered with ID");
+        }
 
+        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userModel));
+    }
 }
