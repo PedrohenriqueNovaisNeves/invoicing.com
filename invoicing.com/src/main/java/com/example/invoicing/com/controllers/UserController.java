@@ -30,10 +30,15 @@ public class UserController {
     }
 
     @PostMapping("/insertUser")
-    public ResponseEntity<Object> insertUser(@RequestBody @Valid UserRecord userRecord){
+    public UserModel insertUser(@RequestBody @Valid UserRecord userRecord){
         var user = new UserModel();
         BeanUtils.copyProperties(userRecord, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userServices.saveUser(user));
+
+        if(user.getIdUser() == null){
+            user.setIdUser(UUID.randomUUID());
+        }
+
+        return userServices.saveUser(user);
     }
 
     @GetMapping("/listUsers")

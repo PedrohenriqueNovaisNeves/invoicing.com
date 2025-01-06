@@ -30,11 +30,12 @@ public class UserServices {
         return ResponseEntity.status(HttpStatus.OK).body(user.get());
     }
 
-    public ResponseEntity<Object> saveUser(UserModel userModel){
+    public UserModel saveUser(UserModel userModel){
+
         if(userRepository.findById(userModel.getIdUser()).isPresent()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already registered with ID");
+            throw new RuntimeException("Usuário já existe com o UUID: " + userModel.getIdUser());
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userModel));
+        return userRepository.save(userModel);
     }
 }
