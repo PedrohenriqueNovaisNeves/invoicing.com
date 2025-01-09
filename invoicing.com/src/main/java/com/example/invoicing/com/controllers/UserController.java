@@ -51,15 +51,7 @@ public class UserController {
 
     @PutMapping("/updateUser/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "id")UUID id, @RequestBody @Valid UserRecord userRecord){
-        Optional<UserModel> user0 = userRepository.findById(id);
-
-        if(user0.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }
-
-        var userModel = user0.get();
-        BeanUtils.copyProperties(userRecord, userModel);
-        return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(userModel));
+        return ResponseEntity.status(HttpStatus.OK).body(userServices.updateUser(id, userRecord));
     }
 
     @DeleteMapping("/deleteUser/{id}")

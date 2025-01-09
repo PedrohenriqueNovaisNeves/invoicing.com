@@ -50,5 +50,14 @@ public class UserServices {
         return false;
     }
 
+    public ResponseEntity<Object> updateUser(UUID id, UserRecord userRecord){
+        Optional<UserModel> user1 = userRepository.findById(id);
 
+        if(user1.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        var user2 = user1.get();
+        BeanUtils.copyProperties(userRecord, user2);
+        return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(user2));
+    }
 }
