@@ -1,14 +1,16 @@
 package com.example.invoicing.com.services;
 
+import com.example.invoicing.com.dtos.UserRecord;
 import com.example.invoicing.com.models.UserModel;
 import com.example.invoicing.com.repository.UserRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServices {
@@ -30,12 +32,23 @@ public class UserServices {
         return ResponseEntity.status(HttpStatus.OK).body(user.get());
     }
 
-    public UserModel saveUser(UserModel userModel){
-
-        if(userRepository.findById(userModel.getIdUser()).isPresent()){
-            throw new RuntimeException("Usuário já existe com o UUID: " + userModel.getIdUser());
-        }
-
-        return userRepository.save(userModel);
+    public ResponseEntity<UserModel> saveUser(UserModel userModel){
+        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userModel));
     }
+
+    public boolean isUsernameTaken(UserModel userModel) {
+        List<UserModel> users = userRepository.findAll();
+
+        List<UserModel> duplicados = users.stream()
+                .filter(user -> user.getNameUser().equalsIgnoreCase(userModel.getNameUser()))
+                .collect(Collectors.toList());
+
+        if (!duplicados.isEmpty()) {
+            System.out.println("Usuários duplicados encontrados: " + duplicados);
+            return true;
+        }
+        return false;
+    }
+
+
 }

@@ -30,15 +30,13 @@ public class UserController {
     }
 
     @PostMapping("/insertUser")
-    public UserModel insertUser(@RequestBody @Valid UserRecord userRecord){
+    public ResponseEntity<Object> insertUser(@RequestBody @Valid UserRecord userRecord){
         var user = new UserModel();
         BeanUtils.copyProperties(userRecord, user);
-
-        if(user.getIdUser() == null){
-            user.setIdUser(UUID.randomUUID());
+        if(userServices.isUsernameTaken(user)){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Existing user " + user.getNameUser());
         }
-
-        return userServices.saveUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userServices.saveUser(user));
     }
 
     @GetMapping("/listUsers")
