@@ -19,9 +19,6 @@ import java.util.UUID;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     UserServices userServices;
 
     @GetMapping("/ping")
@@ -56,13 +53,6 @@ public class UserController {
 
     @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") UUID id){
-        Optional<UserModel> user0 = userRepository.findById(id);
-
-        if(user0.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }
-
-        userRepository.delete(user0.get());
-        return ResponseEntity.status(HttpStatus.OK).body("User delete successfully");
+        return ResponseEntity.status(HttpStatus.OK).body(userServices.deleteUser(id));
     }
 }

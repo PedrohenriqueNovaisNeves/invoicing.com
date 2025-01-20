@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,5 +58,16 @@ public class UserServices {
         var user2 = user1.get();
         BeanUtils.copyProperties(userRecord, user2);
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(user2));
+    }
+
+    public ResponseEntity<Object> deleteUser(UUID id){
+        Optional<UserModel> user = userRepository.findById(id);
+
+        if(user.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("user not found");
+        }
+
+        userRepository.delete(user.get());
+        return ResponseEntity.status(HttpStatus.OK).body("User delete successfully");
     }
 }
