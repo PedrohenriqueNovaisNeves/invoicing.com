@@ -2,7 +2,6 @@ package com.example.invoicing.com.controllers;
 
 import com.example.invoicing.com.dtos.UserRecord;
 import com.example.invoicing.com.models.UserModel;
-import com.example.invoicing.com.repository.UserRepository;
 import com.example.invoicing.com.services.UserServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -54,5 +52,10 @@ public class UserController {
     @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") UUID id){
         return ResponseEntity.status(HttpStatus.OK).body(userServices.deleteUser(id));
+    }
+
+    @DeleteMapping("/deleteAllUsers")
+    public ResponseEntity<Object> deleteAllUsers(){
+        return ResponseEntity.status(HttpStatus.OK).body(userServices.deleteAllUsers());
     }
 }

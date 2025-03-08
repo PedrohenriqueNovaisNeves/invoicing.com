@@ -31,8 +31,8 @@ public class UserServices {
         return ResponseEntity.status(HttpStatus.OK).body(user.get());
     }
 
-    public ResponseEntity<UserModel> saveUser(UserModel userModel){
-        return ResponseEntity.status(HttpStatus.CREATED).body(userRepository.save(userModel));
+    public UserModel saveUser(UserModel userModel){
+        return userRepository.save(userModel);
     }
 
     public boolean isUsernameTaken(UserModel userModel) {
@@ -70,4 +70,12 @@ public class UserServices {
         userRepository.delete(user.get());
         return ResponseEntity.status(HttpStatus.OK).body("User delete successfully");
     }
+
+    public ResponseEntity<Object> deleteAllUsers(){
+        userRepository.deleteAll();
+
+        return ResponseEntity.status(HttpStatus.OK).body("All Users delete successfully");
+    }
+
+    
 }

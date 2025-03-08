@@ -19,6 +19,7 @@ public class InvoiceModel implements Serializable {
     private BigDecimal value;
     private String descriptionInvoice;
     private Date maturity;
+    private String invoiceCod;
 
     public UUID getIdInvoice() {
         return idInvoice;
@@ -40,6 +41,10 @@ public class InvoiceModel implements Serializable {
         return maturity;
     }
 
+    public String getInvoiceCod(){
+        return invoiceCod;
+    }
+
     public void setIdInvoice(UUID idInvoice) {
         this.idInvoice = idInvoice;
     }
@@ -58,5 +63,9 @@ public class InvoiceModel implements Serializable {
 
     public void setMaturity(Date maturity) {
         this.maturity = maturity;
+    }
+
+    public void setInvoiceCod(String invoiceCod){
+        this.invoiceCod = invoiceCod;
     }
 }
