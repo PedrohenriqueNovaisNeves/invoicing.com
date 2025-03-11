@@ -3,6 +3,7 @@ package com.example.invoicing.com.controllers;
 import com.example.invoicing.com.dtos.InvoiceRecord;
 import com.example.invoicing.com.models.InvoiceModel;
 import com.example.invoicing.com.services.InvoiceServices;
+import com.example.invoicing.com.validation.ValidationsInvoice;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class InvoiceController {
     @Autowired
     InvoiceServices invoiceServices;
 
+    @Autowired
+    ValidationsInvoice validationInvoice;
+
     @GetMapping("/ping")
     public String ping() {
         return "ping!";
@@ -29,7 +33,7 @@ public class InvoiceController {
         var invoice = new InvoiceModel();
         BeanUtils.copyProperties(invoiceRecord, invoice);
 
-        if (invoiceServices.validationInvoice(invoice)) {
+        if (validationInvoice.validationInvoice(invoice)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Invoice existing");
         }
 

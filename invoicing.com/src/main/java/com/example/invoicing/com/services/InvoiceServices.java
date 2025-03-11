@@ -60,19 +60,6 @@ public class InvoiceServices {
         return ResponseEntity.status(HttpStatus.OK).body("Invoice delete successfully");
     }
 
-    public boolean validationInvoice(InvoiceModel invoiceModel){
-        List<InvoiceModel> allInvoices = invoiceRepository.findAll();
-
-        List<InvoiceModel> duplicates = allInvoices.stream()
-                .filter(invoiceModel1 -> invoiceModel1.getInvoiceCod().equalsIgnoreCase(invoiceModel.getInvoiceCod()))
-                .collect(Collectors.toList());
-
-        if(!duplicates.isEmpty()){
-            return true;
-        }
-        return false;
-    }
-
     public ResponseEntity<Object> deleteAllInvoices(){
         invoiceRepository.deleteAll();
         return ResponseEntity.status(HttpStatus.OK).body("All invoices delete successfully");

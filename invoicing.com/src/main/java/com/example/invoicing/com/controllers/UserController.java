@@ -32,9 +32,15 @@ public class UserController {
     public ResponseEntity<Object> insertUser(@RequestBody @Valid UserRecord userRecord){
         var user = new UserModel();
         BeanUtils.copyProperties(userRecord, user);
-        if(validationsUser.isUsernameTaken(user)){
+
+        if(validationsUser.validationCpfUser(user.getCPF())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CPF does not meet the requirements");
+        }
+
+        if(validationsUser.validateRegistration(user)){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Existing user " + user.getNameUser());
         }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(userServices.saveUser(user));
     }
 

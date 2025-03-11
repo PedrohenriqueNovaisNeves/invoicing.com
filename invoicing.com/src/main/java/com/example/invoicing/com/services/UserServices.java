@@ -18,8 +18,6 @@ public class UserServices {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    ValidationsUser validationsUser;
 
     public List<UserModel> listUsers(){
         return userRepository.findAll();

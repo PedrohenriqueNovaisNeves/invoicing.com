@@ -16,9 +16,8 @@ public class ValidationsUser {
     @Autowired
     UserRepository userRepository;
 
-    public boolean validationCpfUser(UserModel userModel){
+    public boolean validationCpfUser(String cpfUser){
 
-        String cpfUser = userModel.getCPF();
         char[] convertStringToChar = cpfUser.toCharArray();
         int numberOfCharacters = convertStringToChar.length;
 
@@ -29,11 +28,11 @@ public class ValidationsUser {
         return false;
     }
 
-    public boolean isUsernameTaken(UserModel userModel) {
+    public boolean validateRegistration(UserModel userModel) {
         List<UserModel> users = userRepository.findAll();
 
         List<UserModel> duplicados = users.stream()
-                .filter(user -> user.getNameUser().equalsIgnoreCase(userModel.getNameUser()))
+                .filter(user -> user.getCPF().equalsIgnoreCase(userModel.getCPF()))
                 .collect(Collectors.toList());
 
         if (!duplicados.isEmpty()) {
@@ -42,4 +41,6 @@ public class ValidationsUser {
         }
         return false;
     }
+
+
 }
