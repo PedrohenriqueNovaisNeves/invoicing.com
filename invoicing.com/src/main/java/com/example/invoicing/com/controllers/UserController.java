@@ -3,6 +3,7 @@ package com.example.invoicing.com.controllers;
 import com.example.invoicing.com.dtos.UserRecord;
 import com.example.invoicing.com.models.UserModel;
 import com.example.invoicing.com.services.UserServices;
+import com.example.invoicing.com.validation.ValidationsUser;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class UserController {
     @Autowired
     UserServices userServices;
 
+    @Autowired
+    ValidationsUser validationsUser;
+
     @GetMapping("/ping")
     public String ping(){
         return "ping!";
@@ -28,7 +32,7 @@ public class UserController {
     public ResponseEntity<Object> insertUser(@RequestBody @Valid UserRecord userRecord){
         var user = new UserModel();
         BeanUtils.copyProperties(userRecord, user);
-        if(userServices.isUsernameTaken(user)){
+        if(validationsUser.isUsernameTaken(user)){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Existing user " + user.getNameUser());
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(userServices.saveUser(user));

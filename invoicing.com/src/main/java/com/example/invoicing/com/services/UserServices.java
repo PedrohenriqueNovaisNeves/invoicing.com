@@ -3,6 +3,8 @@ package com.example.invoicing.com.services;
 import com.example.invoicing.com.dtos.UserRecord;
 import com.example.invoicing.com.models.UserModel;
 import com.example.invoicing.com.repository.UserRepository;
+import com.example.invoicing.com.validation.ValidationsUser;
+import org.apache.coyote.Response;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ public class UserServices {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ValidationsUser validationsUser;
 
     public List<UserModel> listUsers(){
         return userRepository.findAll();
@@ -33,20 +37,6 @@ public class UserServices {
 
     public UserModel saveUser(UserModel userModel){
         return userRepository.save(userModel);
-    }
-
-    public boolean isUsernameTaken(UserModel userModel) {
-        List<UserModel> users = userRepository.findAll();
-
-        List<UserModel> duplicados = users.stream()
-                .filter(user -> user.getNameUser().equalsIgnoreCase(userModel.getNameUser()))
-                .collect(Collectors.toList());
-
-        if (!duplicados.isEmpty()) {
-            System.out.println("Usuários duplicados encontrados: " + duplicados);
-            return true;
-        }
-        return false;
     }
 
     public ResponseEntity<Object> updateUser(UUID id, UserRecord userRecord){
@@ -76,6 +66,4 @@ public class UserServices {
 
         return ResponseEntity.status(HttpStatus.OK).body("All Users delete successfully");
     }
-
-    
 }
