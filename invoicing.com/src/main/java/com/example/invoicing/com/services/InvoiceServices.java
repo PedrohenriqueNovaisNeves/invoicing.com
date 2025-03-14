@@ -19,51 +19,59 @@ public class InvoiceServices {
     @Autowired
     InvoiceRepository invoiceRepository;
 
-    public ResponseEntity<InvoiceModel> saveInvoice(InvoiceModel invoiceModel){
-        return ResponseEntity.status(HttpStatus.CREATED).body(invoiceRepository.save(invoiceModel));
+    public InvoiceModel saveInvoice(InvoiceModel invoiceModel){
+        return invoiceRepository.save(invoiceModel);
     }
 
-    public ResponseEntity<List<InvoiceModel>> listInvoices(){
-        return ResponseEntity.status(HttpStatus.OK).body(invoiceRepository.findAll());
+    public List<InvoiceModel> listAllInvoices(){
+        return invoiceRepository.findAll();
     }
 
-    public ResponseEntity<Object> listOneInvoice(UUID id){
+    public Object listOneInvoice(UUID id){
+        return invoiceRepository.findById(id);
+    }
+
+    public InvoiceModel updateInvoice(UUID id, InvoiceModel invoiceModel){
         Optional<InvoiceModel> invoice = invoiceRepository.findById(id);
 
         if(invoice.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("invoice not found");
+            throw new RuntimeException("Invoice not found");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(invoice.get());
+        var newInvoice = invoice.get();
+
+        newInvoice.setTitle(invoiceModel.getTitle());
+        newInvoice.setValue(invoiceModel.getValue());
+        newInvoice.setDescriptionInvoice(invoiceModel.getDescriptionInvoice());
+        newInvoice.setMaturity(invoiceModel.getMaturity());
+        newInvoice.setInvoiceCod(invoiceModel.getInvoiceCod());
+
+        return invoiceRepository.save(newInvoice);
     }
 
-    public ResponseEntity<Object> updateInvoice(InvoiceRecord invoiceRecord, UUID id){
+    public void updateInvoiceStatus(UUID id, InvoiceModel invoiceModel){
         Optional<InvoiceModel> invoice = invoiceRepository.findById(id);
 
         if(invoice.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("invoice not found");
+            throw new RuntimeException("invoice not found");
         }
 
-        var invoice1 = invoice.get();
-        BeanUtils.copyProperties(invoiceRecord, invoice1);
-        return ResponseEntity.status(HttpStatus.OK).body(invoiceRepository.save(invoice1));
+        var newInvoice = invoice.get();
+
+        newInvoice.setPaid(invoiceModel.isPaid());
     }
 
-    public ResponseEntity<Object> invoiceDelete(UUID id){
+    public void deleteOneInvoice(UUID id){
         Optional<InvoiceModel> invoice = invoiceRepository.findById(id);
 
         if(invoice.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("invoice not found");
+            throw new RuntimeException("Invoice not found");
         }
 
         invoiceRepository.delete(invoice.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Invoice delete successfully");
     }
 
-    public ResponseEntity<Object> deleteAllInvoices(){
+    public void deleteAllInvoices(){
         invoiceRepository.deleteAll();
-        return ResponseEntity.status(HttpStatus.OK).body("All invoices delete successfully");
     }
-
-
 }
