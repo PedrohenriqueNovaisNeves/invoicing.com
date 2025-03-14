@@ -29,39 +29,15 @@ public class InvoiceController {
     }
 
     @PostMapping("/insertInvoice")
-    public ResponseEntity<Object> insertInvoice(@RequestBody @Valid InvoiceRecord invoiceRecord) {
+    public ResponseEntity<Object> saveInvoice(@Valid @RequestBody InvoiceRecord invoiceRecord){
         var invoice = new InvoiceModel();
         BeanUtils.copyProperties(invoiceRecord, invoice);
 
-        if (validationInvoice.validationInvoice(invoice)) {
+        if(validationInvoice.validationInvoice(invoice)){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Invoice existing");
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(invoiceServices.saveInvoice(invoice));
-    }
-
-    @GetMapping("/listInvoices")
-    public ResponseEntity<List<InvoiceModel>> listInvoices() {
-        return invoiceServices.listInvoices();
-    }
-
-    @GetMapping("/oneInvoice/{id}")
-    public ResponseEntity<Object> getOneInvoice(@PathVariable(value = "id") UUID id) {
-        return ResponseEntity.status(HttpStatus.OK).body(invoiceServices.listOneInvoice(id));
-    }
-
-    @PutMapping("/updateInvoice/{id}")
-    public ResponseEntity<Object> updateInvoice(@PathVariable(value = "id") UUID id, @RequestBody @Valid InvoiceRecord invoiceRecord) {
-        return ResponseEntity.status(HttpStatus.OK).body(invoiceServices.updateInvoice(invoiceRecord, id));
-    }
-
-    @DeleteMapping("/deleteInvoice/{id}")
-    public ResponseEntity<Object> deleteInvoice(@PathVariable(value = "id") UUID id) {
-        return ResponseEntity.status(HttpStatus.OK).body(invoiceServices.invoiceDelete(id));
-    }
-
-    @DeleteMapping("/deleteAllInvoices")
-    public ResponseEntity<Object> deleteAllInvoices(){
-        return ResponseEntity.status(HttpStatus.OK).body(invoiceServices.deleteAllInvoices());
+        invoiceServices.saveInvoice(invoice);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registered Invoice");
     }
 }

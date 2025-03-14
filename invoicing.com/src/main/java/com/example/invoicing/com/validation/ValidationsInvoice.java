@@ -3,10 +3,13 @@ package com.example.invoicing.com.validation;
 import com.example.invoicing.com.models.InvoiceModel;
 import com.example.invoicing.com.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ValidationsInvoice {
 
     @Autowired
