@@ -39,7 +39,8 @@ public class InvoiceServices {
         newInvoice.setValue(invoiceModel.getValue());
         newInvoice.setDescriptionInvoice(invoiceModel.getDescriptionInvoice());
         newInvoice.setMaturity(invoiceModel.getMaturity());
-        newInvoice.setInvoiceCod(invoiceModel.getInvoiceCod());
+        newInvoice.setPaid(invoiceModel.isPaid());
+        newInvoice.setPriority(invoiceModel.getPriority());
 
         return invoiceRepository.save(newInvoice);
     }

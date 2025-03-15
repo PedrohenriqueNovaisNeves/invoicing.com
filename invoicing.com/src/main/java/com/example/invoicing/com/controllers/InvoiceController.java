@@ -33,11 +33,17 @@ public class InvoiceController {
         var invoice = new InvoiceModel();
         BeanUtils.copyProperties(invoiceRecord, invoice);
 
-        if(validationInvoice.validationInvoice(invoice)){
+        if(!validationInvoice.validationInvoice(invoice)){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Invoice existing");
         }
 
         invoiceServices.saveInvoice(invoice);
         return ResponseEntity.status(HttpStatus.CREATED).body("Registered Invoice");
+    }
+
+    @GetMapping("/listAllInvoices")
+    public ResponseEntity<List<InvoiceModel>> listAllInvoices(){
+        List<InvoiceModel> listInvoices = invoiceServices.listAllInvoices();
+        return ResponseEntity.status(HttpStatus.OK).body(listInvoices);
     }
 }

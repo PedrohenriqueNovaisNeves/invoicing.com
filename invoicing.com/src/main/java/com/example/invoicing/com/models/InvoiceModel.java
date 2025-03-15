@@ -22,11 +22,11 @@ public class InvoiceModel implements Serializable {
     private BigDecimal value;
     private String descriptionInvoice;
     private Date maturity;
-    @Column(unique = true)
-    private String invoiceCod;
-
     @Column(nullable = false)
     private boolean paid;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Priority priority;
 
     public UUID getIdInvoice() {
         return idInvoice;
@@ -48,8 +48,8 @@ public class InvoiceModel implements Serializable {
         return maturity;
     }
 
-    public String getInvoiceCod() {
-        return invoiceCod;
+    public Priority getPriority() {
+        return priority;
     }
 
     public boolean isPaid() {
@@ -68,7 +68,7 @@ public class InvoiceModel implements Serializable {
         this.value = value;
     }
 
-    public void setDescriptionInvoice(String descriptionInvoice) {
+    public void setDescriptionInvoice(String descriptionInvoice){
         this.descriptionInvoice = descriptionInvoice;
     }
 
@@ -76,11 +76,11 @@ public class InvoiceModel implements Serializable {
         this.maturity = maturity;
     }
 
-    public void setInvoiceCod(String invoiceCod) {
-        this.invoiceCod = invoiceCod;
-    }
-
     public void setPaid(boolean paid) {
         this.paid = paid;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 }

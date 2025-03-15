@@ -19,7 +19,9 @@ public class ValidationsInvoice {
         List<InvoiceModel> allInvoices = invoiceRepository.findAll();
 
         List<InvoiceModel> duplicates = allInvoices.stream()
-                .filter(invoiceModel1 -> invoiceModel1.getInvoiceCod().equalsIgnoreCase(invoiceModel.getInvoiceCod()))
+                .filter((invoiceModel1 -> invoiceModel1.getTitle().equalsIgnoreCase(invoiceModel.getTitle()) && invoiceModel1.getValue().equals(invoiceModel.getValue()) &&
+                        invoiceModel1.getDescriptionInvoice().equalsIgnoreCase(invoiceModel.getDescriptionInvoice()) &&
+                        invoiceModel1.getMaturity().equals(invoiceModel.getMaturity())))
                 .collect(Collectors.toList());
 
         if(!duplicates.isEmpty()){
