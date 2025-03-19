@@ -42,9 +42,20 @@ public class InvoiceController {
         return ResponseEntity.status(HttpStatus.OK).body(listInvoices);
     }
 
+    @GetMapping("/oneInvoice/{id}")
+    public ResponseEntity<Object> listOneInvoice(@PathVariable(value = "id")UUID id){
+        return ResponseEntity.status(HttpStatus.OK).body(invoiceServices.listOneInvoice(id));
+    }
+
     @GetMapping("/listInvoicesByPriority")
     public ResponseEntity<List<InvoiceModel>> listInvoicesByPriority(@Valid @RequestBody InvoiceModel invoiceModel){
         List<InvoiceModel> invoices = invoiceServices.listByPriority(invoiceModel.getPriority());
+        return ResponseEntity.status(HttpStatus.OK).body(invoices);
+    }
+
+    @GetMapping("/listInvoicesByUser")
+    public ResponseEntity<List<InvoiceModel>> listInvoicesByUser(@Valid @RequestBody UserModel userModel){
+        List<InvoiceModel> invoices = invoiceServices.listInvoicesByUser(userModel.getNameUser());
         return ResponseEntity.status(HttpStatus.OK).body(invoices);
     }
 }

@@ -32,15 +32,16 @@ public class InvoiceServices {
     }
 
     public Object listOneInvoice(UUID id){
-        return invoiceRepository.findById(id);
+        return invoiceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Invoice not found"));
     }
 
     public List<InvoiceModel> listByPriority(Priority priority){
         return invoiceRepository.findByPriority(priority);
     }
 
-    public List<InvoiceModel> listInvoicesByUser(UserModel userModel){
-        var user = userRepository.findByNameUser(userModel.getNameUser())
+    public List<InvoiceModel> listInvoicesByUser(String nameUser){
+        var user = userRepository.findByNameUser(nameUser)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         return invoiceRepository.findByUser_IdUser(user.getIdUser());
