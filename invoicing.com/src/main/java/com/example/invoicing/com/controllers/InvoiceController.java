@@ -41,4 +41,10 @@ public class InvoiceController {
         List<InvoiceModel> listInvoices = invoiceServices.listAllInvoices();
         return ResponseEntity.status(HttpStatus.OK).body(listInvoices);
     }
+
+    @GetMapping("/listInvoicesByPriority")
+    public ResponseEntity<List<InvoiceModel>> listInvoicesByPriority(@Valid @RequestBody InvoiceModel invoiceModel){
+        List<InvoiceModel> invoices = invoiceServices.listByPriority(invoiceModel.getPriority());
+        return ResponseEntity.status(HttpStatus.OK).body(invoices);
+    }
 }

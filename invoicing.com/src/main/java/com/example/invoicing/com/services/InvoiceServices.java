@@ -1,6 +1,7 @@
 package com.example.invoicing.com.services;
 
 import com.example.invoicing.com.models.InvoiceModel;
+import com.example.invoicing.com.models.Priority;
 import com.example.invoicing.com.models.UserModel;
 import com.example.invoicing.com.repository.InvoiceRepository;
 import com.example.invoicing.com.repository.UserRepository;
@@ -32,6 +33,17 @@ public class InvoiceServices {
 
     public Object listOneInvoice(UUID id){
         return invoiceRepository.findById(id);
+    }
+
+    public List<InvoiceModel> listByPriority(Priority priority){
+        return invoiceRepository.findByPriority(priority);
+    }
+
+    public List<InvoiceModel> listInvoicesByUser(UserModel userModel){
+        var user = userRepository.findByNameUser(userModel.getNameUser())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return invoiceRepository.findByUser_IdUser(user.getIdUser());
     }
 
     public InvoiceModel updateInvoice(UUID id, InvoiceModel invoiceModel){
