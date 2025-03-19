@@ -9,4 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<InvoiceModel, UUID> {
+
+    //List<InvoiceModel> findByIdUser(UUID idUser);
 }

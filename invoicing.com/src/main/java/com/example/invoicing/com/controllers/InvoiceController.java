@@ -1,7 +1,9 @@
 package com.example.invoicing.com.controllers;
 
 import com.example.invoicing.com.dtos.InvoiceRecord;
+import com.example.invoicing.com.dtos.InvoiceRequest;
 import com.example.invoicing.com.models.InvoiceModel;
+import com.example.invoicing.com.models.UserModel;
 import com.example.invoicing.com.services.InvoiceServices;
 import com.example.invoicing.com.validation.ValidationsInvoice;
 import jakarta.validation.Valid;
@@ -20,24 +22,17 @@ public class InvoiceController {
     @Autowired
     InvoiceServices invoiceServices;
 
-    @Autowired
-    ValidationsInvoice validationInvoice;
-
     @GetMapping("/ping")
     public String ping() {
         return "ping!";
     }
 
     @PostMapping("/insertInvoice")
-    public ResponseEntity<Object> saveInvoice(@Valid @RequestBody InvoiceRecord invoiceRecord){
+    public ResponseEntity<Object> saveInvoice(@Valid @RequestBody InvoiceRequest request){
         var invoice = new InvoiceModel();
-        BeanUtils.copyProperties(invoiceRecord, invoice);
+        BeanUtils.copyProperties(request.invoiceRecord(), invoice);
 
-        if(!validationInvoice.validationInvoice(invoice)){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Invoice existing");
-        }
-
-        invoiceServices.saveInvoice(invoice);
+        invoiceServices.saveInvoice(request.nameUser(), invoice);
         return ResponseEntity.status(HttpStatus.CREATED).body("Registered Invoice");
     }
 

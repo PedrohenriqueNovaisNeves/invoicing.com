@@ -1,7 +1,9 @@
 package com.example.invoicing.com.services;
 
 import com.example.invoicing.com.models.InvoiceModel;
+import com.example.invoicing.com.models.UserModel;
 import com.example.invoicing.com.repository.InvoiceRepository;
+import com.example.invoicing.com.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,8 +15,14 @@ public class InvoiceServices {
 
     @Autowired
     InvoiceRepository invoiceRepository;
+    @Autowired
+    UserRepository userRepository;
 
-    public InvoiceModel saveInvoice(InvoiceModel invoiceModel){
+    public InvoiceModel saveInvoice(String nameUser, InvoiceModel invoiceModel){
+        var user = userRepository.findByNameUser(nameUser)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        invoiceModel.setUser(user);
         return invoiceRepository.save(invoiceModel);
     }
 

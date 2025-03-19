@@ -1,5 +1,6 @@
 package com.example.invoicing.com.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,11 @@ public class InvoiceModel implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Priority priority;
+
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
+    @JsonIgnore
+    private UserModel user;
 
     public UUID getIdInvoice() {
         return idInvoice;
@@ -56,6 +62,10 @@ public class InvoiceModel implements Serializable {
         return paid;
     }
 
+    public UserModel getUser() {
+        return user;
+    }
+
     public void setIdInvoice(UUID idInvoice) {
         this.idInvoice = idInvoice;
     }
@@ -82,5 +92,13 @@ public class InvoiceModel implements Serializable {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
+    }
+
+    public UUID getIdUser(){
+        return user != null ? user.getIdUser() : null;
     }
 }

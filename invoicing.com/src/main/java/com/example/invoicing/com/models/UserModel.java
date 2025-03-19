@@ -1,7 +1,10 @@
 package com.example.invoicing.com.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +19,10 @@ public class UserModel implements Serializable {
     private String CPF;
     private String RG;
     private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<InvoiceModel> invoices;
 
     public UUID getIdUser() {
         return idUser;
@@ -37,6 +44,10 @@ public class UserModel implements Serializable {
         return email;
     }
 
+    public List<InvoiceModel> getInvoices() {
+        return invoices;
+    }
+
     public void setIdUser(UUID idUser) {
         this.idUser = idUser;
     }
@@ -56,4 +67,13 @@ public class UserModel implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void setInvoices(List<InvoiceModel> invoices) {
+        this.invoices = invoices;
+    }
+
+    public int getTotalInvoices(){
+        return invoices != null ? invoices.size() : 0;
+    }
+
 }
