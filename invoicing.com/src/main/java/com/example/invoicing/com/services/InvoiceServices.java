@@ -42,7 +42,7 @@ public class InvoiceServices {
 
     public List<InvoiceModel> listInvoicesByUser(String nameUser){
         var user = userRepository.findByNameUser(nameUser)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(" User not found"));
 
         return invoiceRepository.findByUser_IdUser(user.getIdUser());
     }

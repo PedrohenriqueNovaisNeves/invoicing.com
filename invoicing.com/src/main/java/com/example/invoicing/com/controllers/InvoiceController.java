@@ -58,4 +58,15 @@ public class InvoiceController {
         List<InvoiceModel> invoices = invoiceServices.listInvoicesByUser(userModel.getNameUser());
         return ResponseEntity.status(HttpStatus.OK).body(invoices);
     }
+
+    @PutMapping("/updateInvoice/{id}")
+    public ResponseEntity<Object> updateInvoice(@PathVariable(value = "id")UUID id, @Valid @RequestBody InvoiceRecord invoiceRecord){
+        var invoice = new InvoiceModel();
+        BeanUtils.copyProperties(invoiceRecord, invoice);
+
+        invoiceServices.updateInvoice(id, invoice);
+        return ResponseEntity.status(HttpStatus.OK).body("Invoce update successfully");
+    }
+
+
 }
