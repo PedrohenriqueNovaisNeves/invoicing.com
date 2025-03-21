@@ -5,7 +5,6 @@ import com.example.invoicing.com.dtos.InvoiceRequest;
 import com.example.invoicing.com.models.InvoiceModel;
 import com.example.invoicing.com.models.UserModel;
 import com.example.invoicing.com.services.InvoiceServices;
-import com.example.invoicing.com.validation.ValidationsInvoice;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +71,17 @@ public class InvoiceController {
     public ResponseEntity<Object> toUpdateStatusInvoice(@PathVariable(value = "id")UUID id, @Valid @RequestBody InvoiceModel invoiceModel){
         invoiceServices.updateInvoiceStatus(id, invoiceModel.isPaid());
         return ResponseEntity.status(HttpStatus.OK).body("Status the invocie updated");
+    }
+
+    @DeleteMapping("/deleteOneInvoice/{id}")
+    public ResponseEntity<Object> deleteOneInvoice(@PathVariable(value = "id")UUID id){
+        invoiceServices.deleteOneInvoice(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Invoice delete successfully");
+    }
+
+    @DeleteMapping("/deleteAllInvoices")
+    public ResponseEntity<Object> deleteAllInvoices(){
+        invoiceServices.deleteAllInvoices();
+        return ResponseEntity.status(HttpStatus.OK).body("Invoices deleted");
     }
 }
