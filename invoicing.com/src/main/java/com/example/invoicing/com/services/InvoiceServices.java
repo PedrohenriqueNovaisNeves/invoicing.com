@@ -66,16 +66,18 @@ public class InvoiceServices {
         return invoiceRepository.save(newInvoice);
     }
 
-    public void updateInvoiceStatus(UUID id, InvoiceModel invoiceModel){
+    public InvoiceModel updateInvoiceStatus(UUID id, boolean status){
         Optional<InvoiceModel> invoice = invoiceRepository.findById(id);
 
         if(invoice.isEmpty()){
             throw new RuntimeException("invoice not found");
         }
 
-        var newInvoice = invoice.get();
+        InvoiceModel newInvoice = invoice.get();
 
-        newInvoice.setPaid(invoiceModel.isPaid());
+        newInvoice.setPaid(status);
+
+        return invoiceRepository.save(newInvoice);
     }
 
     public void deleteOneInvoice(UUID id){

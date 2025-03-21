@@ -68,5 +68,9 @@ public class InvoiceController {
         return ResponseEntity.status(HttpStatus.OK).body("Invoce update successfully");
     }
 
-
+    @PutMapping("/updateStatusInvoice/{id}")
+    public ResponseEntity<Object> toUpdateStatusInvoice(@PathVariable(value = "id")UUID id, @Valid @RequestBody InvoiceModel invoiceModel){
+        invoiceServices.updateInvoiceStatus(id, invoiceModel.isPaid());
+        return ResponseEntity.status(HttpStatus.OK).body("Status the invocie updated");
+    }
 }
