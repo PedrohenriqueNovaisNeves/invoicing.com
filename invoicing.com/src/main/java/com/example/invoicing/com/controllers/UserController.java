@@ -41,4 +41,15 @@ public class UserController {
     public ResponseEntity<List<UserModel>> listAllUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(userServices.listAllUsers());
     }
+
+    @PutMapping
+    public ResponseEntity<Object> updateUser(@PathVariable(value = "id")UUID id, @Valid @RequestBody UserRecord userRecord){
+        var user = new UserModel();
+        BeanUtils.copyProperties(userRecord, user);
+
+        userServices.updateUser(id, user);
+        return ResponseEntity.status(HttpStatus.OK).body("User update completed successfully");
+    }
+
+
 }
