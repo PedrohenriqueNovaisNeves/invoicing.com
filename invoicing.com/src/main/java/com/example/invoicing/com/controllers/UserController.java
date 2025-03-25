@@ -27,4 +27,18 @@ public class UserController {
     public String ping(){
         return "ping!";
     }
+
+    @PostMapping("/insertUser")
+    public ResponseEntity<Object> saveUser(@Valid @RequestBody UserRecord userRecord){
+        var userModel = new UserModel();
+        BeanUtils.copyProperties(userRecord, userModel);
+
+        userServices.saveUser(userModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registered User");
+    }
+
+    @GetMapping("/listUsers")
+    public ResponseEntity<List<UserModel>> listAllUsers(){
+        return ResponseEntity.status(HttpStatus.OK).body(userServices.listAllUsers());
+    }
 }
