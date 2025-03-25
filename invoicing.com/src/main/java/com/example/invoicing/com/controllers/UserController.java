@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -42,7 +43,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userServices.listAllUsers());
     }
 
-    @PutMapping
+    @GetMapping("/oneUser/{id}")
+    public ResponseEntity<Object> listOneUser(@PathVariable(value = "id")UUID id){
+        var user = userServices.listOneUser(id);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
+    @PutMapping("/updateUser/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable(value = "id")UUID id, @Valid @RequestBody UserRecord userRecord){
         var user = new UserModel();
         BeanUtils.copyProperties(userRecord, user);
