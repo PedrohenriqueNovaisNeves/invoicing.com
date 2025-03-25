@@ -19,49 +19,54 @@ public class UserServices {
     @Autowired
     UserRepository userRepository;
 
-    public List<UserModel> listUsers(){
-        return userRepository.findAll();
-    }
-
-    public ResponseEntity<Object> listOneUser(UUID id){
-        Optional<UserModel> user = userRepository.findById(id);
-
-        if(user.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id: " + id + " not found");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(user.get());
-    }
+    @Autowired
+    ValidationsUser validationsUser;
 
     public UserModel saveUser(UserModel userModel){
+        if(validationsUser.validateRegistration(userModel)){
+            throw new RuntimeException("user already registered");
+        }
+
         return userRepository.save(userModel);
     }
 
-    public ResponseEntity<Object> updateUser(UUID id, UserRecord userRecord){
-        Optional<UserModel> user1 = userRepository.findById(id);
-
-        if(user1.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }
-        var user2 = user1.get();
-        BeanUtils.copyProperties(userRecord, user2);
-        return ResponseEntity.status(HttpStatus.OK).body(userRepository.save(user2));
+    public List<UserModel> listAllUsers(){
+        return userRepository.findAll();
     }
 
-    public ResponseEntity<Object> deleteUser(UUID id){
+    public Object listOneUser(UUID id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("user not found"));
+    }
+
+    public UserModel updateUser(UUID id, UserModel userModel){
         Optional<UserModel> user = userRepository.findById(id);
 
         if(user.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("user not found");
+            throw new RuntimeException("User not found");
+        }
+
+        var newUser = user.get();
+
+        newUser.setNameUser((userModel.getNameUser()));
+        newUser.setCPF(userModel.getCPF());
+        newUser.setRG(userModel.getRG());
+        newUser.setEmail(userModel.getEmail());
+
+        return userRepository.save(newUser);
+    }
+
+    public void deleteOneUser(UUID id){
+        Optional<UserModel> user = userRepository.findById(id);
+
+        if(user.isEmpty()){
+            throw new RuntimeException("User not found");
         }
 
         userRepository.delete(user.get());
-        return ResponseEntity.status(HttpStatus.OK).body("User delete successfully");
     }
 
-    public ResponseEntity<Object> deleteAllUsers(){
+    public void deleteAllUsers(){
         userRepository.deleteAll();
-
-        return ResponseEntity.status(HttpStatus.OK).body("All Users delete successfully");
     }
 }

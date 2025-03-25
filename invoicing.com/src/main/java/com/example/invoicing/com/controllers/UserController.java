@@ -27,45 +27,4 @@ public class UserController {
     public String ping(){
         return "ping!";
     }
-
-    @PostMapping("/insertUser")
-    public ResponseEntity<Object> insertUser(@RequestBody @Valid UserRecord userRecord){
-        var user = new UserModel();
-        BeanUtils.copyProperties(userRecord, user);
-
-        if(validationsUser.validationCpfUser(user.getCPF())){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CPF does not meet the requirements");
-        }
-
-        if(validationsUser.validateRegistration(user)){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Existing user " + user.getNameUser());
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userServices.saveUser(user));
-    }
-
-    @GetMapping("/listUsers")
-    public ResponseEntity<List<UserModel>> listAllUsers(){
-        return ResponseEntity.status(HttpStatus.OK).body(userServices.listUsers());
-    }
-
-    @GetMapping("/oneUser/{id}")
-    public ResponseEntity<Object> getOneUser(@PathVariable(value = "id")UUID id){
-       return ResponseEntity.status(HttpStatus.OK).body(userServices.listOneUser(id));
-    }
-
-    @PutMapping("/updateUser/{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable(value = "id")UUID id, @RequestBody @Valid UserRecord userRecord){
-        return ResponseEntity.status(HttpStatus.OK).body(userServices.updateUser(id, userRecord));
-    }
-
-    @DeleteMapping("/deleteUser/{id}")
-    public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") UUID id){
-        return ResponseEntity.status(HttpStatus.OK).body(userServices.deleteUser(id));
-    }
-
-    @DeleteMapping("/deleteAllUsers")
-    public ResponseEntity<Object> deleteAllUsers(){
-        return ResponseEntity.status(HttpStatus.OK).body(userServices.deleteAllUsers());
-    }
 }
