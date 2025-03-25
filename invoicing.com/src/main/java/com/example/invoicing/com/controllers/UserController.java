@@ -63,4 +63,10 @@ public class UserController {
         userServices.deleteOneUser(id);
         return ResponseEntity.status(HttpStatus.OK).body("Delete user completed successfully");
     }
+
+    @DeleteMapping("/deleteAllUsers")
+    public ResponseEntity<Object> deleteAllUsers(){
+        userServices.deleteAllUsers();
+        return ResponseEntity.status(HttpStatus.OK).body("Deleted Users");
+    }
 }
