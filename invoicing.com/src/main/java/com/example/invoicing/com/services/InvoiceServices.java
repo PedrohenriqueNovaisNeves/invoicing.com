@@ -5,6 +5,7 @@ import com.example.invoicing.com.models.Priority;
 import com.example.invoicing.com.models.UserModel;
 import com.example.invoicing.com.repository.InvoiceRepository;
 import com.example.invoicing.com.repository.UserRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -66,7 +67,7 @@ public class InvoiceServices {
         return invoiceRepository.save(newInvoice);
     }
 
-    public InvoiceModel updateInvoiceStatus(UUID id, boolean status){
+    public InvoiceModel updateInvoiceStatus(UUID id, String status){
         Optional<InvoiceModel> invoice = invoiceRepository.findById(id);
 
         if(invoice.isEmpty()){
@@ -75,7 +76,11 @@ public class InvoiceServices {
 
         InvoiceModel newInvoice = invoice.get();
 
-        newInvoice.setPaid(status);
+        JSONObject json = new JSONObject(status);
+
+        String paid = json.getString("status");
+
+        newInvoice.setStatus(paid);
 
         return invoiceRepository.save(newInvoice);
     }

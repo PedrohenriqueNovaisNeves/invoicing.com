@@ -2,9 +2,6 @@ package com.example.invoicing.com.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -64,6 +61,12 @@ public class InvoiceModel implements Serializable {
 
     public UserModel getUser() {
         return user;
+    }
+
+    public void setStatus(String status){
+        if(status.equalsIgnoreCase("pago")){
+            this.paid = true;
+        }
     }
 
     public void setIdInvoice(UUID idInvoice) {
