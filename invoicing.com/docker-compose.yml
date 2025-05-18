@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres
+    container_name: invoicingDb
+    environment:
+      POSTGRES_DB: invoicing
+      POSTGRES_USER: pedro
+      POSTGRES_PASSWORD: pedro123
+    ports:
+      - "5433:5432"
+    networks:
+      - invoicing-net
+
+  app:
+    image: springboot
+    container_name: invoicingApp
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/invoicing
+      SPRING_DATASOURCE_USERNAME: pedro
+      SPRING_DATASOURCE_PASSWORD: pedro123
+    networks:
+      - invoicing-net
+    ports:
+      - "5436:8080"
+
+networks:
+  invoicing-net:
+    driver: bridge
