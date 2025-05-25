@@ -1,7 +1,9 @@
 package com.example.invoicing.com.controllers;
 
+import com.example.invoicing.com.dtos.EmailRecord;
 import com.example.invoicing.com.dtos.UserRecord;
 import com.example.invoicing.com.models.UserModel;
+import com.example.invoicing.com.services.EmailService;
 import com.example.invoicing.com.services.UserServices;
 import com.example.invoicing.com.validation.ValidationsUser;
 import jakarta.validation.Valid;
@@ -11,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -23,6 +24,9 @@ public class UserController {
 
     @Autowired
     ValidationsUser validationsUser;
+
+    @Autowired
+    EmailService emailService;
 
     @GetMapping("/ping")
     public String ping(){
@@ -68,5 +72,11 @@ public class UserController {
     public ResponseEntity<Object> deleteAllUsers(){
         userServices.deleteAllUsers();
         return ResponseEntity.status(HttpStatus.OK).body("Deleted Users");
+    }
+
+    @PostMapping("/sendMailUser")
+    public ResponseEntity<String> sendMail(@RequestBody EmailRecord emailRecord){
+        emailService.enviarEmailSimples(emailRecord.getPara(), emailRecord.getAssunto(), emailRecord.getCorpo());
+        return ResponseEntity.status(HttpStatus.OK).body("Email send with successfully");
     }
 }
